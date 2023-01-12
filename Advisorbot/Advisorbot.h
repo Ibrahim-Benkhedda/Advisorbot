@@ -8,6 +8,7 @@
 #include <vector>
 #include <sstream>
 #include <unordered_map>
+#include <time.h>
 
 
 class Advisorbot
@@ -27,13 +28,28 @@ class Advisorbot
 		void getMax();
 		void getAverage();
 		void getProduct();
-		void predictMarket();
+		double predictMarket();
 		void getTime();
+		void moveToNextTimeStep();
 
 		OrderBook orderBook{ "20200601.csv" };
+		
 
 		/** type alias that represents a pointer to a member function of Advisorbot that returns void */
 		using AdvisorbotFunctionPointer = void (Advisorbot::*)();
+		/**Check if the product is in the list of available products */
+		bool isValidProduct(const std::string& product);
+		/**Check if its a "bid" or "ask */
+		bool isValidBidAsk(const std::string& bidAsk);
+		// data members 
+		std::vector<std::string> availableProducts;
+		std::string currentTime;
+
+		std::string userProduct;
+		std::string userOrderTypeStr;
+		OrderBookType userOrderType;
+		std::vector<double> getLastNOrderBookEntries(const std::string& product, OrderBookType orderType, int n);
+
 
 		
 
