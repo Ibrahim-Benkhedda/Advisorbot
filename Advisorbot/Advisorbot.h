@@ -24,11 +24,11 @@ class Advisorbot
 		void matchCommands(const std::vector<std::string>& userCommands);
 		/** deals with orders */
 		void printHelp();
-		void getMin();
-		void getMax();
-		void getAverage();
+		void getMin(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr);
+		void getMax(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr);
+		double getAverage(std::string product, OrderBookType orderType, int steps);
 		void getProduct();
-		double predictMarket();
+		double predictMarket(std::string product, OrderBookType orderType, int steps);
 		void getTime();
 		void moveToNextTimeStep();
 
@@ -36,19 +36,28 @@ class Advisorbot
 		
 
 		/** type alias that represents a pointer to a member function of Advisorbot that returns void */
-		using AdvisorbotFunctionPointer = void (Advisorbot::*)();
-		/**Check if the product is in the list of available products */
+		using AdvisorbotFunctionPointer = void(Advisorbot::*)(const std::vector<std::string>&);
+		/** Check if the product is in the list of available products */
 		bool isValidProduct(const std::string& product);
-		/**Check if its a "bid" or "ask */
+		/** Check if its a "bid" or "ask */
 		bool isValidBidAsk(const std::string& bidAsk);
+
+		bool isValidNumber(std::string parsedArgument);
+
+		void processHelpCommand(const std::vector<std::string>& userCommands);
+		void processMinCommand(const std::vector<std::string>& userCommands);
+		void processMaxCommand(const std::vector<std::string>& userCommands);
+		void processAvgCommand(const std::vector<std::string>& userCommands);
+		void processPredictCommand(const std::vector<std::string>& userCommands);
+		void processProdCommand(const std::vector<std::string>& userCommands);
+		void processTimeCommand(const std::vector<std::string>& userCommands);
+		void processStepCommand(const std::vector<std::string>& userCommands);
+
 		// data members 
 		std::vector<std::string> availableProducts;
 		std::string currentTime;
 
-		std::string userProduct;
-		std::string userOrderTypeStr;
-		OrderBookType userOrderType;
-		std::vector<double> getLastNOrderBookEntries(const std::string& product, OrderBookType orderType, int n);
+		std::vector<double> getEntriesByTimestep(const std::string& product, OrderBookType orderType, int n);
 
 
 		
