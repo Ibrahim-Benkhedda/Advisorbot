@@ -64,19 +64,19 @@ void CommandHandler::processHelpCommand(const std::vector<std::string>& userComm
     std::map<std::string, std::string> commandsHelpText = {
         {"min", "The min command finds the minimum bid or ask for a product in the current time step."},
         {"max", "The max command finds the maximum bid or ask for a product in the current time step."},
-        {"avg", "The avg command finds the average bid or ask for a product in the current time step."},
+        {"avg", "The avg command finds the average bid or ask for a product in the current time step or over N time steps."},
         {"prod", "The prod command lists all available products."},
         {"predict", "The predict command predicts the price of a product at a specific time."},
         {"time", "The time command sets the current time for the program."},
         {"step", "The step command advances the current time by a specific number of steps."},
-        {"stddev", "The stddev command computes the standard deviation of a product price at the current time step or over steps"}
+        {"stddev", "The stddev command computes the standard deviation of a product price at the current time step or over N steps"}
     };
 
     // validates and execute the help command
     if (userCommands[0] == "help") {
         // if the user enters help only with no extra argument
         if (userCommands.size() == 1) {
-            Advisorbot::executePrintHelp();
+            executePrintHelp();
         }
         // if there's a second command (argument) that is not "help" and it's in the map.
         else if (userCommands.size() == 2 && userCommands[1] != "help" && commandsHelpText.count(userCommands[1])) {
@@ -94,7 +94,7 @@ void CommandHandler::processHelpCommand(const std::vector<std::string>& userComm
 void CommandHandler::processProdCommand(const std::vector<std::string>& userCommands) {
     // validate if the first command is prod and the size of the commands is 1. execute the product command.
     if (userCommands[0] == "prod" && userCommands.size() == 1) {
-        Advisorbot::executeProduct();
+        executeProduct();
     }
 }
 
@@ -109,9 +109,8 @@ void CommandHandler::processMinCommand(const std::vector<std::string>& userComma
 
     if (userCommands[0] == "min" && userCommands.size() == 3 && isValidProduct(userCommands[1]) && isValidBidAsk(userCommands[2])) {
         std::string parsedProduct = userCommands[1];
-        std::string parsedOrderTypeStr = userCommands[2];
         OrderBookType parsedOrderType = OrderBookEntry::stringToOrderBookType(userCommands[2]);
-        Advisorbot::executeMin(parsedProduct, parsedOrderType, parsedOrderTypeStr);
+        executeMin(parsedProduct, parsedOrderType);
     }
 }
 
@@ -125,9 +124,8 @@ void CommandHandler::processMaxCommand(const std::vector<std::string>& userComma
     if (userCommands[0] == "max" && userCommands.size() == 3 && isValidProduct(userCommands[1]) && isValidBidAsk(userCommands[2])) {
         // If the first command is "min", there are three arguments, and the second and third are valid product and bid/ask, respectively, call the corresponding function
         std::string parsedProduct = userCommands[1];
-        std::string parsedOrderTypeStr = userCommands[2];
         OrderBookType parsedOrderType = OrderBookEntry::stringToOrderBookType(userCommands[2]);
-        Advisorbot::executeMax(parsedProduct, parsedOrderType, parsedOrderTypeStr);
+        executeMax(parsedProduct, parsedOrderType);
     }
 }
 
@@ -142,7 +140,6 @@ void CommandHandler::processAvgCommand(const std::vector<std::string>& userComma
 
     if (userCommands[0] == "avg" && userCommands.size() == 4 && isValidProduct(userCommands[1]) && isValidBidAsk(userCommands[2]) && isValidNumber(userCommands[3])) {
         std::string parsedProduct = userCommands[1];
-        std::string parsedOrderTypeStr = userCommands[2];
         OrderBookType parsedOrderType = OrderBookEntry::stringToOrderBookType(userCommands[2]);
         int steps = std::stoi(userCommands[3]); // convert the third argument of the avg command into a integer
         executeAverage(parsedProduct, parsedOrderType, steps);
@@ -152,14 +149,14 @@ void CommandHandler::processAvgCommand(const std::vector<std::string>& userComma
 void CommandHandler::processTimeCommand(const std::vector<std::string>& userCommands) {
     // validate if the first command is time and the size of the commands is 1. execute the time command.
     if (userCommands[0] == "time" && userCommands.size() == 1) {
-        Advisorbot::executeTime();
+        executeTime();
     }
 }
 
 void CommandHandler::processStepCommand(const std::vector<std::string>& userCommands) {
     // validate if the first command is 'step' and the size of the commands is 1. execute the 'step' command.
     if (userCommands[0] == "step" && userCommands.size() == 1) {
-        Advisorbot::executeNextTimeStep();
+        executeNextTimeStep();
     }
 }
 
@@ -175,7 +172,6 @@ void CommandHandler::processPredictCommand(const std::vector<std::string>& userC
 
     if (userCommands[0] == "predict" && userCommands.size() == 4 && isValidProduct(userCommands[1]) && isValidBidAsk(userCommands[2]) && isValidNumber(userCommands[3])) {
         std::string parsedProduct = userCommands[1];
-        std::string parsedOrderTypeStr = userCommands[2];
         OrderBookType parsedOrderType = OrderBookEntry::stringToOrderBookType(userCommands[2]);
         int steps = std::stoi(userCommands[3]); // convert the third argument of the avg command into a integer
         executePredictMarket(parsedProduct, parsedOrderType, steps);
@@ -192,19 +188,17 @@ void CommandHandler::processStddevCommand(const std::vector<std::string>& userCo
     if (userCommands.size() == 4) {
         if (userCommands[0] == "stddev" && isValidProduct(userCommands[1]) && isValidBidAsk(userCommands[2]) && isValidNumber(userCommands[3])) {
             std::string parsedProduct = userCommands[1];
-            std::string parsedOrderTypeStr = userCommands[2];
             OrderBookType parsedOrderType = OrderBookEntry::stringToOrderBookType(userCommands[2]);
             int steps = std::stoi(userCommands[3]); // convert the third argument of the avg command into a integer
-            Advisorbot::executeStandardDeviation(parsedProduct, parsedOrderType, steps);
+            executeStandardDeviation(parsedProduct, parsedOrderType, steps);
 
         }
     }
     else if (userCommands.size() == 3) {
         if (userCommands[0] == "stddev" && isValidProduct(userCommands[1]) && isValidBidAsk(userCommands[2])) {
             std::string parsedProduct = userCommands[1];
-            std::string parsedOrderTypeStr = userCommands[2];
             OrderBookType parsedOrderType = OrderBookEntry::stringToOrderBookType(userCommands[2]);
-            Advisorbot::executeStandardDeviation(parsedProduct, parsedOrderType);
+            executeStandardDeviation(parsedProduct, parsedOrderType);
         }
     }
     else {
@@ -223,7 +217,6 @@ bool CommandHandler::isValidNumber(std::string parsedArgument) {
             std::cout << "Invalid Argument. The timestep must be a positive integer" << std::endl;
             return false;
         }
-        std::cout << number << std::endl;
         return true;
     }
     catch (const std::invalid_argument& e) {
@@ -246,5 +239,6 @@ bool CommandHandler::isValidProduct(const std::string& product) {
 
 bool CommandHandler::isValidBidAsk(const std::string& bidAsk) {
     // Check if the bidAsk is "bid" or "ask"
-    return (bidAsk == "bid" || bidAsk == "ask");
+    if (bidAsk == "bid" || bidAsk == "ask") return true;
+    else std::cout << "Invalid order type..." << std::endl; return false;
 }

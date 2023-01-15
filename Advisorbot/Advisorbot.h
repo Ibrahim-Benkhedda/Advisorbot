@@ -28,12 +28,12 @@ class Advisorbot
 	protected:
 		/** execute and performe the functionality of the specific command */
 
-		/** prints all the available commands*/
+		/** prints all the available commands */
 		void executePrintHelp();
 		/** command that gets the lowest price of the current timestamp */
-		void executeMin(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr);
+		void executeMin(std::string userProduct, OrderBookType userOrderType);
 		/** command that gets the highest price of the current timestamp */
-		void executeMax(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr);
+		void executeMax(std::string userProduct, OrderBookType userOrderType);
 		/** command  that gets the avg of specified number of steps */
 		void executeAverage(std::string product, OrderBookType orderType, int steps);
 		/** lists all available products */

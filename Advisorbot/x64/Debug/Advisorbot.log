@@ -1,2 +1,9 @@
 ﻿  Advisorbot.cpp
+C:\Users\SHiFT\source\repos\Advisorbot\Advisorbot\Advisorbot.cpp(294,41): warning C4101: 'e': unreferenced local variable
+  CSVReader.cpp
+C:\Users\SHiFT\source\repos\Advisorbot\Advisorbot\CSVReader.cpp(22,32): warning C4101: 'e': unreferenced local variable
+C:\Users\SHiFT\source\repos\Advisorbot\Advisorbot\CSVReader.cpp(43,49): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\SHiFT\source\repos\Advisorbot\Advisorbot\CSVReader.cpp(46,48): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\SHiFT\source\repos\Advisorbot\Advisorbot\CSVReader.cpp(78,31): warning C4101: 'e': unreferenced local variable
+  Generating Code...
   Advisorbot.vcxproj -> C:\Users\SHiFT\source\repos\Advisorbot\x64\Debug\Advisorbot.exe

@@ -21,6 +21,9 @@ class OrderBookEntry
 
         /*converts string into an OrderBookType*/
         static OrderBookType stringToOrderBookType(std::string s);
+
+        /** converts OrderBookType into string */
+        static std::string OrderBookTypeToString(const OrderBookType& type);
         
         /*data members */
         double price;

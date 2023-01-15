@@ -44,22 +44,24 @@ void Advisorbot::executePrintHelp() {
     std::cout << "step" << std::endl;
     std::cout << "stddev [product] bid/ask (optional: timesteps)" << std::endl;
 }
-void Advisorbot::executeMin(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr) {   
+void Advisorbot::executeMin(std::string product, OrderBookType ordertype) {   
     std::vector<OrderBookEntry> entries = orderBook.getOrders(
-        userOrderType, userProduct, currentTime
+        ordertype, product, currentTime
     );
 
-    std::cout << "Min " << userOrderTypeStr << " of: " << userProduct << " " << OrderBook::computeLowPrice(entries) << std::endl;
+    std::string strOrderType = OrderBookEntry::OrderBookTypeToString(ordertype);
+    std::cout << "Min " << strOrderType << " of: " << product << " " << OrderBook::computeLowPrice(entries) << std::endl;
 }
 
 // void Advisorbot::getMax(std::string product, OrderBookType orderType)
-void Advisorbot::executeMax(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr) {
+void Advisorbot::executeMax(std::string product, OrderBookType ordertype) {
 
     std::vector<OrderBookEntry> entries = orderBook.getOrders(
-        userOrderType, userProduct, currentTime
+        ordertype, product, currentTime
     );
 
-    std::cout << "Max " << userOrderTypeStr << " of: " << userProduct << " " << OrderBook::computeHighPrice(entries) << std::endl;
+    std::string strOrderType = OrderBookEntry::OrderBookTypeToString(ordertype);
+    std::cout << "Max " << strOrderType << " of: " << product << " " << OrderBook::computeHighPrice(entries) << std::endl;
 
 }
 void Advisorbot::executeProduct() {
@@ -96,7 +98,9 @@ void Advisorbot::executeAverage(std::string product, OrderBookType orderType, in
 
     // Return the average of the ask prices over the last N timesteps
     double average =  sum / steps;
-    std::cout << "The Average " << product << " " << " ask/bid " << " over the last " << steps << " : " << average << std::endl;
+    // convert the order type from OrderBookEntry to a string to print it out
+    std::string strOrderType = OrderBookEntry::OrderBookTypeToString(orderType);
+    std::cout << "The Average " << product << " " << strOrderType << " over the last " << steps << " : " << average << std::endl;
 }
 
 void Advisorbot::executePredictMarket(std::string product, OrderBookType orderType, int steps) {
@@ -122,22 +126,27 @@ void Advisorbot::executePredictMarket(std::string product, OrderBookType orderTy
         currentEMA = (price * smoothingFactor) + (previousEMA * (1 - smoothingFactor));
         previousEMA = currentEMA;
     }
-    // the current EMA, which represents the moving average of entries
-    std::cout << "The Exponetial moving Average " << product << " " << " ask/bid " << " over the last " << steps << " : " << currentEMA << std::endl;
+    // the current EMA represents the moving average of entries
+    // convert the order type from OrderBookEntry to a string to print it out
+    std::string strOrderType = OrderBookEntry::OrderBookTypeToString(orderType);
+    std::cout << "The Exponetial moving Average " << product << " " << strOrderType << " over the last " << steps << " steps : " << currentEMA << std::endl;
 }
 
 void Advisorbot::executeStandardDeviation(std::string product, OrderBookType orderType, int steps) {
+    std::string strOrderType = OrderBookEntry::OrderBookTypeToString(orderType);
     // if steps is provided, get orders by N steps, else get orders for the current time
     if (steps) {
         std::vector<OrderBookEntry> entries = getOrdersByTimestep(product, orderType, steps);
 
-        std::cout << "The standard Deviation : " << OrderBook::computeStandardDeviation(entries) << "%" << std::endl;
+        std::cout << "The standard Deviation of " << product << " " << strOrderType << " over the last " << steps << " steps : " << OrderBook::computeStandardDeviation(entries) << " % " << std::endl;
+        
     }
     else {
         std::vector<OrderBookEntry> entries = orderBook.getOrders(
             orderType, product, currentTime
         );
-        std::cout << "The standard Deviation : " << OrderBook::computeStandardDeviation(entries) << "%" << std::endl;
+
+        std::cout << "The standard Deviation of " << product << " " << strOrderType << "current time step : " << OrderBook::computeStandardDeviation(entries) << "%" << std::endl;
     }
 
     
@@ -159,7 +168,6 @@ std::vector<OrderBookEntry> Advisorbot::getOrdersByTimestep(const std::string& p
     std::vector<OrderBookEntry> entries;
     std::string time = currentTime;
     for (int i = 0; i < n; i++) {
-        std::cout << "its working" << std::endl;
         std::vector<OrderBookEntry> currentEntries = orderBook.getOrders(orderType, product, time);
         time = orderBook.getNextTime(time);
         // adding entries from the current timestep in every iteration of the loop

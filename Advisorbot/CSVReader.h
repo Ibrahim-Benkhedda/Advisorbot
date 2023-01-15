@@ -7,6 +7,10 @@
 #include <fstream>
 #include <sstream>
 
+/** CSV Reader class deals with reading the CSV file,
+	tokenizer function and converting string to Order book entry object
+*/
+
 class CSVReader
 {
 	public:
