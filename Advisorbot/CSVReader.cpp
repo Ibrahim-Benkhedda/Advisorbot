@@ -1,4 +1,5 @@
 #include "CSVReader.h"
+#include <chrono>
 
 
 
@@ -7,6 +8,7 @@ CSVReader::CSVReader() {
 }
 
 std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename) {
+	auto start = std::chrono::high_resolution_clock::now();
 	std::vector<OrderBookEntry> entries;
 
 	std::ifstream csvFile{ csvFilename }; // open the file
@@ -24,6 +26,11 @@ std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename) {
 
 	// prints how much we read in
 	std::cout << "Total entries read: " << entries.size() << "entries" << std::endl;
+
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Time taken: " << duration.count() << " ms" << std::endl;
+
 	return entries;
 }
 

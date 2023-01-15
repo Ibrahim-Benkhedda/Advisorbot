@@ -10,54 +10,60 @@
 #include <unordered_map>
 #include <time.h>
 
+/** 
+	The Advisorbot is the main class of the whole application. contains all the functions
+	that performes the specific action of the commands.
+*/
 
 class Advisorbot
 {
 	public:
+		/** Constructor Function of the Advisorbot */
 		Advisorbot();
+		/** create instance of the Advisorbot class */ 
 		void init();
+	
+	/** protected is members of the Advisorbot class that can be accessed by its derived classes (CommandHandler),
+		also known as the child */ 
+	protected:
+		/** execute and performe the functionality of the specific command */
 
-	private:
-		/** gets the commands from the user, return it as a vector of tokens of command*/
-		std::vector<std::string> parseUserCommands();
-		/** gets the user input command, and tries to match it with a function based on the input */
-		void matchCommands(const std::vector<std::string>& userCommands);
-		/** deals with orders */
-		void printHelp();
-		void getMin(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr);
-		void getMax(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr);
-		double getAverage(std::string product, OrderBookType orderType, int steps);
-		void getProduct();
-		double predictMarket(std::string product, OrderBookType orderType, int steps);
-		void getTime();
-		void moveToNextTimeStep();
-
-		OrderBook orderBook{ "20200601.csv" };
-		
-
-		/** type alias that represents a pointer to a member function of Advisorbot that returns void */
-		using AdvisorbotFunctionPointer = void(Advisorbot::*)(const std::vector<std::string>&);
-		/** Check if the product is in the list of available products */
-		bool isValidProduct(const std::string& product);
-		/** Check if its a "bid" or "ask */
-		bool isValidBidAsk(const std::string& bidAsk);
-
-		bool isValidNumber(std::string parsedArgument);
-
-		void processHelpCommand(const std::vector<std::string>& userCommands);
-		void processMinCommand(const std::vector<std::string>& userCommands);
-		void processMaxCommand(const std::vector<std::string>& userCommands);
-		void processAvgCommand(const std::vector<std::string>& userCommands);
-		void processPredictCommand(const std::vector<std::string>& userCommands);
-		void processProdCommand(const std::vector<std::string>& userCommands);
-		void processTimeCommand(const std::vector<std::string>& userCommands);
-		void processStepCommand(const std::vector<std::string>& userCommands);
+		/** prints all the available commands*/
+		void executePrintHelp();
+		/** command that gets the lowest price of the current timestamp */
+		void executeMin(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr);
+		/** command that gets the highest price of the current timestamp */
+		void executeMax(std::string userProduct, OrderBookType userOrderType, std::string userOrderTypeStr);
+		/** command  that gets the avg of specified number of steps */
+		void executeAverage(std::string product, OrderBookType orderType, int steps);
+		/** lists all available products */
+		void executeProduct();
+		/** predicts the market using Exponential Moving Average */
+		void executePredictMarket(std::string product, OrderBookType orderType, int steps);
+		/** gets the current time */
+		void executeTime();
+		/** moves from the current time by one step */
+		void executeNextTimeStep();
+		/** compute the standard deviation over specified number of steps. If no number of steps is specified,
+		    it will use the current time step.*/
+		void executeStandardDeviation(std::string product, OrderBookType orderType, int steps = 0);
 
 		// data members 
 		std::vector<std::string> availableProducts;
 		std::string currentTime;
 
-		std::vector<double> getEntriesByTimestep(const std::string& product, OrderBookType orderType, int n);
+		/** get the prices of the order book entries by the N timesteps */ 
+		std::vector<double> getOBEPricesByTimestep(const std::string& product, OrderBookType orderType, int n);
+		/** get the orders of the order book entries by the N timesteps */
+		std::vector<OrderBookEntry> getOrdersByTimestep(const std::string& product, OrderBookType orderType, int n);
+
+	private:
+		
+		OrderBook orderBook{ "20200601.csv" };
+
+
+
+		
 
 
 		

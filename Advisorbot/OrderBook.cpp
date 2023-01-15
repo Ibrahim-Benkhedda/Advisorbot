@@ -26,7 +26,7 @@ std::vector<std::string> OrderBook::getKnownProducts() {
 }
 
 // we don't need the static keyword when implementing the function
-double OrderBook::getHighPrice(std::vector<OrderBookEntry>& orders) {
+double OrderBook::computeHighPrice(std::vector<OrderBookEntry>& orders) {
 	double max = orders[0].price;
 	for (OrderBookEntry& e : orders) {
 		if (e.price > max) {
@@ -38,7 +38,7 @@ double OrderBook::getHighPrice(std::vector<OrderBookEntry>& orders) {
 	return max;
 }
 
-double OrderBook::getLowPrice(std::vector<OrderBookEntry>& orders) {
+double OrderBook::computeLowPrice(std::vector<OrderBookEntry>& orders) {
 	double min = orders[0].price;
 	for (OrderBookEntry& e : orders) {
 		if (e.price < min) {
@@ -49,13 +49,30 @@ double OrderBook::getLowPrice(std::vector<OrderBookEntry>& orders) {
 	return min;
 }
 
-double OrderBook::getMean(std::vector<OrderBookEntry>& orders) {
+double OrderBook::computeMean(std::vector<OrderBookEntry>& orders) {
 	double sum = 0;
 	for (const OrderBookEntry& e : orders) {
 		sum = sum + e.price;
 	}
 
 	return sum / orders.size();
+}
+
+double OrderBook::computeStandardDeviation(std::vector<OrderBookEntry>& orders) {
+	// The formula for standard deviation is:
+	// sigma = sqrt( sum((x_i - mean)^2) / n )
+
+	double mean = computeMean(orders);
+	double sum = 0;
+
+	// calculate the variance
+	for (const OrderBookEntry& e : orders) {
+		sum += pow(e.price - mean, 2);
+	}
+
+	//calculate the standard deviation
+	double standardDeviation = sqrt(sum / orders.size());
+	return standardDeviation;
 }
 
 

@@ -34,12 +34,13 @@ class OrderBook
 		std::string getNextTime(std::string timestamp);
 
 		// static because it doesn't need to look at any data stored inside class ?????
-		/** prints the highest price*/
-		static double getHighPrice(std::vector<OrderBookEntry>& orders);
-		static double getLowPrice(std::vector<OrderBookEntry>& orders);
-		/** gets the mean of orders*/
-		static double getMean(std::vector<OrderBookEntry>& orders);
-		static double getMovingAverage(const std::string& product, OrderBookType orderType, std::string currentTime);
+		/** prints the highest price */
+		static double computeHighPrice(std::vector<OrderBookEntry>& orders);
+		static double computeLowPrice(std::vector<OrderBookEntry>& orders);
+		/** gets the mean of orders */
+		static double computeMean(std::vector<OrderBookEntry>& orders);
+		/** computes the standard deviation */
+		static double computeStandardDeviation(std::vector<OrderBookEntry>& orders);
 
 	private:
 		/** stores orders*/
