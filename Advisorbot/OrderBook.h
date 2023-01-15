@@ -30,16 +30,16 @@ class OrderBook
 		std::string getEarliestTime();
 
 		/** returns the next time after the sent time in the orderbook.
-		*	if there's no time stamp. wraps around to the start */	
+			if there's no time stamp. wraps around to the start */	
 		std::string getNextTime(std::string timestamp);
 
-		// static because it doesn't need to look at any data stored inside class ?????
-		/** prints the highest price */
+		/** calculates the highest price of given orders */
 		static double computeHighPrice(std::vector<OrderBookEntry>& orders);
+		/** calculates the lowest price of given orders  */
 		static double computeLowPrice(std::vector<OrderBookEntry>& orders);
-		/** gets the mean of orders */
+		/** calculates the mean of orders of given orders */
 		static double computeMean(std::vector<OrderBookEntry>& orders);
-		/** computes the standard deviation */
+		/** calculates the standard deviation of given orders */
 		static double computeStandardDeviation(std::vector<OrderBookEntry>& orders);
 
 	private:

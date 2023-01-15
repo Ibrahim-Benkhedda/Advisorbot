@@ -25,7 +25,8 @@ std::vector<std::string> OrderBook::getKnownProducts() {
 	return products;
 }
 
-// we don't need the static keyword when implementing the function
+// Note: we don't need the static keyword when implementing the function // 
+
 double OrderBook::computeHighPrice(std::vector<OrderBookEntry>& orders) {
 	double max = orders[0].price;
 	for (OrderBookEntry& e : orders) {
@@ -95,21 +96,25 @@ std::vector<OrderBookEntry> OrderBook::getOrders(
 }
 
 std::string OrderBook::getEarliestTime() {
+	// returns the earliest time in the orders vector.
 	return orders[0].timestamp;
 }
 
 std::string OrderBook::getNextTime(std::string timestamp) {
 	std::string next_timestamp;
+	// iterate over all OrderBookEntry objects
 	for (OrderBookEntry& e : orders) {
+		// if the current entry timestamp is greater than the input timestamp, store it in the next_timestamp
 		if (e.timestamp > timestamp) {
 			next_timestamp = e.timestamp;
 			break;
 		}
 	}
-
+	// if the next_timestamp is empty, set it to the first timestamp in the orders vector
 	if (next_timestamp == "") {
 		next_timestamp = orders[0].timestamp;
 	}
 
+	// return the next_timestamp
 	return next_timestamp;
 }

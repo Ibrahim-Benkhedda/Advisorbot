@@ -1,3 +1,5 @@
+// Advisorbot.cpp :This file is the main class of the program
+
 #include "Advisorbot.h"
 #include "CommandHandler.h"
 
@@ -19,11 +21,12 @@ void Advisorbot::init() {
         std::vector<std::string> parsedCommands = cmdHandler.parseUserCommands();
 
 
-        /** Print the user input command */
+        /** Print the user input command 
         std::string command;
         for (const auto& command : parsedCommands) {
             std::cout << "commands: " << command << std::endl;
         }
+        */
 
        cmdHandler.matchCommands(parsedCommands);
     }
@@ -93,17 +96,18 @@ void Advisorbot::executeAverage(std::string product, OrderBookType orderType, in
 
     // Return the average of the ask prices over the last N timesteps
     double average =  sum / steps;
-    std::cout << "The Average" << product << " " << "ask/bid" << " over the last " << steps << " : " << average << std::endl;
+    std::cout << "The Average " << product << " " << " ask/bid " << " over the last " << steps << " : " << average << std::endl;
 }
 
 void Advisorbot::executePredictMarket(std::string product, OrderBookType orderType, int steps) {
-    // https://nullbeans.com/how-to-calculate-the-exponential-moving-average-ema/
-    // following the article, here's how we are going to compute the Exponential Moving Average (EMA)
-    // First, calculate the smoothing factor by using the formula : Smoothing Factor = 2 / (number of time periods + 1)
-    // Next, calculate the first intermediate EMA value by using the first data point in the set
-    // We use the following formula to calculate the EMA : EMA(current) = (current value x smoothing factor) + (previous EMA x(1 - smoothing factor))
-    // Continue this process for the entire set of data points
-    // The final EMA value is the last value calculated in this process, which represents the moving average of the data set over the specified number of time periods.
+    /** Inspired from this article :  https://nullbeans.com/how-to-calculate-the-exponential-moving-average-ema/
+     following the article, here's how we are going to compute the Exponential Moving Average (EMA)
+     First, we calculate the smoothing factor by using the formula : Smoothing Factor = 2 / (number of time periods + 1)
+     Next, calculate the first intermediate EMA value by using the first data point in the set
+     We use the following formula to calculate the EMA : EMA(current) = (current value x smoothing factor) + (previous EMA x(1 - smoothing factor))
+     We then continue this process for the entire set of data points
+     The final EMA value is the last value calculated in this process, which represents the exponential
+     moving average of the data set over the specified number of time steps */
    
     // gets the prices of the specific product, order type (bid/ask) by the timesteps that the user provided.
     std::vector<double> entries = getOBEPricesByTimestep(product, orderType, steps);
@@ -119,7 +123,7 @@ void Advisorbot::executePredictMarket(std::string product, OrderBookType orderTy
         previousEMA = currentEMA;
     }
     // the current EMA, which represents the moving average of entries
-    std::cout << "The Exponetial moving Average" << product << " " << "ask/bid" << " over the last " << steps << " : " << currentEMA << std::endl;
+    std::cout << "The Exponetial moving Average " << product << " " << " ask/bid " << " over the last " << steps << " : " << currentEMA << std::endl;
 }
 
 void Advisorbot::executeStandardDeviation(std::string product, OrderBookType orderType, int steps) {
@@ -127,13 +131,13 @@ void Advisorbot::executeStandardDeviation(std::string product, OrderBookType ord
     if (steps) {
         std::vector<OrderBookEntry> entries = getOrdersByTimestep(product, orderType, steps);
 
-        std::cout << OrderBook::computeStandardDeviation(entries) << std::endl;
+        std::cout << "The standard Deviation : " << OrderBook::computeStandardDeviation(entries) << "%" << std::endl;
     }
     else {
         std::vector<OrderBookEntry> entries = orderBook.getOrders(
             orderType, product, currentTime
         );
-        std::cout << OrderBook::computeStandardDeviation(entries) << std::endl;
+        std::cout << "The standard Deviation : " << OrderBook::computeStandardDeviation(entries) << "%" << std::endl;
     }
 
     

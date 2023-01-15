@@ -7,7 +7,7 @@ CSVReader::CSVReader() {
 
 }
 
-std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename) {
+std::vector<OrderBookEntry> CSVReader::readCSV(const std::string& csvFilename) {
 	auto start = std::chrono::high_resolution_clock::now();
 	std::vector<OrderBookEntry> entries;
 

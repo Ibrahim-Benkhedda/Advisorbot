@@ -1,3 +1,4 @@
+// CommandHandler.cpp : This file contains the functions that parse, validate and run the commands.
 #include "CommandHandler.h"
 
 
@@ -217,6 +218,11 @@ bool CommandHandler::isValidNumber(std::string parsedArgument) {
 
     try {
         number = std::stoi(parsedArgument);
+        // checks if its a positive integer, if not, return false.
+        if (number <= 0) {
+            std::cout << "Invalid Argument. The timestep must be a positive integer" << std::endl;
+            return false;
+        }
         std::cout << number << std::endl;
         return true;
     }
