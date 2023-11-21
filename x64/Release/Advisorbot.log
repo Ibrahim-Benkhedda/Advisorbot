@@ -1,4 +1,0 @@
-﻿  OrderBookEntry.cpp
-  Generating code
-c:\users\shift\source\repos\advisorbot\advisorbot\orderbookentry.cpp : fatal error C1301: error accessing program database x64\Release\Advisorbot.ipdb, invalid format, please delete and rebuild
-LINK : fatal error LNK1257: code generation failed
